@@ -1,0 +1,10 @@
+---
+- name: Get service information from Windows Server
+  hosts: windows
+  tasks:
+    - name: Get information about all services
+      win_service_facts:
+    
+    - name: Display service information
+      debug:
+        var: ansible_facts.services
