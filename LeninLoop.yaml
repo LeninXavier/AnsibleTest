@@ -1,0 +1,14 @@
+- hosts: all
+  remote-user: Lenin
+  become: yes
+  tasks:
+    - name: install the latest version of loop application # Heading
+      yum:
+          name: "{{ item }}" #appications name all 4 application in loop 
+          state: present #install
+
+      loop:
+        - php
+        - mysql
+        - unzip
+        - LeninTest Package

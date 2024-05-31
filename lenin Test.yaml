@@ -1,0 +1,20 @@
+
+- hosts: all
+  remote-user: Lenin
+  become: yes
+  tasks:
+    - name: install the latest version of apache # Heading
+      yum:
+          name: httpd #appication name
+          state: present #install
+
+    - name: Start serviec httpd, if not started # headning
+      service:
+            name: httpd #servive name
+            state: started # startign service
+
+    - name: Copy file and assign Permission            
+      Copy:
+        src: /var/lenin/index.html #file source path master machine
+        dest: /etc/index.html   #file target path Client machine
+        mode: '777' # file permission CHMOD

@@ -1,0 +1,46 @@
+- hosts: Group1 #Grouping
+  remote-user: Lenin
+  become: yes
+  vars:
+    ports: 5050
+  tasks:
+
+- name: Add repository
+  yum_repository:
+    name: Jenskins
+    description: EPELJenskins YUM repo
+    baseurl: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    gpgkey: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+- name: install the latest version of jav and Jenkins application # Heading
+  yum:
+   name: "{{ item }}" #appications name all 4 application in loop 
+   state: present #install
+
+  loop:
+    - Java
+    - Jenkins
+    
+- name: Start service Jenkins, if not started # headning
+  service:
+    name: Jenkins #servive name
+    state: started # startign service
+
+    # NOTE: Before 2.3, option 'dest', 'destfile' or 'name' was used instead of 'path'
+- name: changeing config file details using ansible
+  lineinfile:
+    path: /etc/sysconfig/jenkins
+    regexp: '^SJenking_port='
+    line: JENKINS_port= "5050" # one method
+    line: JENKINS_port= {{ports}} # second method add vars in top
+    notify: restart Jenkins
+- name: REStart service Jenkins, if not started # headning
+  service:
+    name: Jenkins #servive name
+    state: started # startign service
+  Handlers:
+  - name: restart Jenkins
+    service:
+    name: Jenkins #servive name
+    state: restarted # startign service
+

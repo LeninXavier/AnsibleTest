@@ -1,0 +1,10 @@
+- hosts: all
+  remote-user: Lenin
+  become: yes
+  vars_files:
+    LeninVaultpass.yaml
+  Tasks: 
+  - name: Trying Echo command
+    debug: 
+      msg: "vault username is {{username}} & password is {{password}}"
+
