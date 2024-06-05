@@ -5,12 +5,12 @@
     - name: Download Chrome installer
       win_get_url:
         url: "https://dl.google.com/chrome/install/latest/chrome_installer.exe"
-        dest: C:\Temp\chrome_installer.exe
+        dest: C:\\Temp\\chrome_installer.exe
 
     - name: Install Chrome
       win_shell: |
-        Start-Process -FilePath "C:\Temp\chrome_installer.exe" -ArgumentList "/silent /install" -Wait
+        Start-Process -FilePath "C:\\Temp\\chrome_installer.exe" -ArgumentList "/silent /install" -Wait
       args:
         executable: powershell.exe
       environment:
-        PATH: "{{ ansible_env.PATH }};C:\Windows\System32"
+        PATH: "{{ ansible_env.PATH }};C:\\Windows\\System32"
