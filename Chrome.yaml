@@ -1,6 +1,6 @@
 ---
 - name: Install Google Chrome
-  hosts: windows_server
+  hosts: all
   tasks:
     - name: Download Chrome installer
       win_get_url:
