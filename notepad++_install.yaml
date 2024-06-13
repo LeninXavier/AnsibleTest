@@ -1,0 +1,9 @@
+---
+- name: Install Notepad++ from network location
+  hosts: windows
+  tasks:
+    - name: Ensure Notepad++ is installed
+      win_package:
+        path: "\\\\network_share\\path\\to\\notepad++_installer.exe"
+        arguments: '/S'  # Silent installation switch for Notepad++
+        state: present

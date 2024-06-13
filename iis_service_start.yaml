@@ -1,0 +1,19 @@
+---
+- name: Check and Start IIS Service
+  hosts: windows
+  tasks:
+    - name: Check the status of IIS service
+      win_service:
+        name: W3SVC
+        start_mode: auto
+      register: iis_service
+
+    - name: Debug IIS service status
+      debug:
+        var: iis_service
+
+    - name: Start the IIS service if it is stopped
+      win_service:
+        name: W3SVC
+        state: started
+      when: iis_service.status == 'stopped'

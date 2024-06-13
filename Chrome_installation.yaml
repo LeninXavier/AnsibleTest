@@ -1,0 +1,25 @@
+---
+- name: Install Google Chrome on Windows
+  hosts: windows
+  tasks:
+    - name: Ensure WinGet is present
+      win_feature:
+        name: WinGet
+        state: present
+
+    - name: Download Chrome installer from network location
+      win_get_url:
+        url: "\\\\network-location\\path\\to\\chrome_installer.exe"
+        dest: "C:\\Temp\\chrome_installer.exe"
+
+    - name: Install Google Chrome
+      win_package:
+        path: "C:\\Temp\\chrome_installer.exe"
+        product_id: "Google Chrome"
+        arguments: "/silent /install"
+        state: present
+
+    - name: Clean up Chrome installer
+      win_file:
+        path: "C:\\Temp\\chrome_installer.exe"
+        state: absent
