@@ -1,0 +1,21 @@
+# copy File to Windows machine
+---
+- name: Copy file windows to Windows machine
+  hosts: windows
+  tasks:
+    - name: Copy file
+      win_copy:
+        src: /path/to/local/file.txt
+        dest: C:\path\to\remote\file.txt
+
+
+# Copy folders with multiple files to Windows machine
+---
+- name: Copy folders with multiple files to Windows machine
+  hosts: windows
+  tasks:
+    - name: Copy directory recursively to Windows machine
+      win_copy:
+        src: /path/to/source/
+        dest: C:\path\to\destination\
+        recurse: yes
