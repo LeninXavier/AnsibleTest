@@ -1,0 +1,40 @@
+---
+- name: Install SQL Server 2022 on Windows Server 2019
+  hosts: windows
+  tasks:
+    - name: Ensure the Temp directory exists
+      win_file:
+        path: C:\Temp
+        state: directory
+
+    - name: Download SQL Server 2022 installer
+      win_get_url:
+        url: https://go.microsoft.com/fwlink/?linkid=866662
+        dest: C:\Temp\SQLServer2022.iso
+
+    - name: Mount the SQL Server 2022 ISO
+      win_command: >
+        PowerShell Mount-DiskImage -ImagePath C:\Temp\SQLServer2022.iso
+      register: mount_result
+
+    - name: Get the drive letter of the mounted ISO
+      win_shell: |
+        (Get-DiskImage -ImagePath 'C:\Temp\SQLServer2022.iso' | Get-Volume).DriveLetter
+      register: drive_letter
+
+    - name: Install SQL Server 2022
+      win_shell: |
+        Start-Process -FilePath "{{ drive_letter.stdout.strip() }}:\setup.exe" -ArgumentList `
+        "/Q /ACTION=Install /IACCEPTSQLSERVERLICENSETERMS /FEATURES=SQL /INSTANCENAME=MSSQLSERVER /SQLSVCACCOUNT='NT AUTHORITY\SYSTEM' /SQLSYSADMINACCOUNTS='{{ ansible_user }}'"
+      args:
+        executable: cmd
+        creates: C:\Program Files\Microsoft SQL Server
+
+    - name: Dismount the SQL Server 2022 ISO
+      win_command: >
+        PowerShell Dismount-DiskImage -ImagePath C:\Temp\SQLServer2022.iso
+
+    - name: Cleanup - Remove SQL Server 2022 ISO
+      win_file:
+        path: C:\Temp\SQLServer2022.iso
+        state: absent
